@@ -1,5 +1,4 @@
 ﻿@page "/weather"
-@attribute [StreamRendering]
 
 <PageTitle>Weather</PageTitle>
 
@@ -7,20 +6,26 @@
 
 <p>This component demonstrates showing data.</p>
 
-<!-- This page is rendered in SSR mode, so the FluentDataGrid component does not offer any interactivity (like sorting). -->
-<FluentDataGrid Id="weathergrid" Items="@forecasts" GridTemplateColumns="1fr 1fr 1fr 2fr" Loading="@(forecasts == null)" Style="height:204px;" TGridItem="WeatherForecast">
-    <PropertyColumn Title="Date" Property="@(c => c!.Date)" Align="Align.Start"/>
-    <PropertyColumn Title="Temp. (C)" Property="@(c => c!.TemperatureC)" Align="Align.Center"/>
-    <PropertyColumn Title="Temp. (F)" Property="@(c => c!.TemperatureF)" Align="Align.Center"/>
-    <PropertyColumn Title="Summary" Property="@(c => c!.Summary)" Align="Align.End"/>
-</FluentDataGrid>
+@if (forecasts == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <FluentDataGrid Id="weathergrid" Items="@forecasts" GridTemplateColumns="1fr 1fr 1fr 2fr" TGridItem="WeatherForecast">
+        <PropertyColumn Title="Date" Property="@(c => c!.Date)" Sortable="true" Align="Align.Start"/>
+        <PropertyColumn Title="Temp. (C)" Property="@(c => c!.TemperatureC)" Sortable="true" Align="Align.Center"/>
+        <PropertyColumn Title="Temp. (F)" Property="@(c => c!.TemperatureF)" Sortable="true" Align="Align.Center"/>
+        <PropertyColumn Title="Summary" Property="@(c => c!.Summary)" Sortable="true" Align="Align.End"/>
+    </FluentDataGrid>
+}
 
 @code {
     private IQueryable<WeatherForecast>? forecasts;
 
     protected override async Task OnInitializedAsync()
     {
-        // Simulate asynchronous loading to demonstrate streaming rendering
+        // Simulate asynchronous loading to demonstrate a loading indicator
         await Task.Delay(500);
 
         var startDate = DateOnly.FromDateTime(DateTime.Now);
