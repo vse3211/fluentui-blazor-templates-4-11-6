@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.FluentUI.AspNetCore.Components;
 using Example.Components;
 using Example.Components.Account;
 using Example.Data;
@@ -10,6 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+builder.Services.AddFluentUIComponents();
 
 builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddScoped<IdentityUserAccessor>();
@@ -50,7 +52,6 @@ else
 }
 
 app.UseHttpsRedirection();
-
 
 app.UseAntiforgery();
 
